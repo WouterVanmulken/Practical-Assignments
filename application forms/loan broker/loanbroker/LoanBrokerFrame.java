@@ -84,10 +84,10 @@ public class LoanBrokerFrame extends JFrame {
         }
         return null;
     }
-    private JListLine getRequestReply() {
+    private JListLine getRequestReply(String correlationId) {
         for (int i = 0; i < listModel.getSize(); i++) {
             JListLine rr = listModel.get(i);
-            if (rr.getBankReply() == null) {
+            if (rr.getCorrelationId().equals(correlationId)) {
                 return rr;
             }
         }
@@ -109,8 +109,8 @@ public class LoanBrokerFrame extends JFrame {
             list.repaint();
         }
     }
-    public void add(BankInterestReply bankReply) {
-        JListLine rr = getRequestReply();
+    public void add(BankInterestReply bankReply, String correlationId) {
+        JListLine rr = getRequestReply(correlationId);
         if (rr != null && bankReply != null) {
             rr.setBankReply(bankReply);
             list.repaint();

@@ -108,7 +108,7 @@ public class JMSBankFrame extends JFrame {
                 if (rr != null && reply != null) {
                     rr.setReply(reply);
                     list.repaint();
-                    sendReply(reply);
+                    sendReply(rr);
                 }
             }
         });
@@ -119,12 +119,12 @@ public class JMSBankFrame extends JFrame {
         contentPane.add(btnSendReply, gbc_btnSendReply);
     }
 
-    private void sendReply(BankInterestReply reply) {
-        Messager.Send(reply, "myThirdDestination");
+    private void sendReply(RequestReply<BankInterestRequest, BankInterestReply> requestReply) {
+        Messager.Send(requestReply.getReply(), "myThirdDestination",requestReply.getCorrelationId());
     }
 
-    public void add(BankInterestRequest interestRequest) {
-        listModel.addElement(new RequestReply<>(interestRequest, null));
+    public void add(BankInterestRequest interestRequest, String correlationId) {
+        listModel.addElement(new RequestReply<>(interestRequest, null,correlationId));
         System.out.println(interestRequest.toString());
     }
 

@@ -26,6 +26,7 @@ public class LoanClientFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static long id;
 	private JPanel contentPane;
 	private JTextField tfSSN;
 	private DefaultListModel<RequestReply<LoanRequest,LoanReply>> listModel = new DefaultListModel<RequestReply<LoanRequest,LoanReply>>();
@@ -114,12 +115,12 @@ public class LoanClientFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				int ssn = Integer.parseInt(tfSSN.getText());
 				int amount = Integer.parseInt(tfAmount.getText());
-				int time = Integer.parseInt(tfTime.getText());				
-				
+				int time = Integer.parseInt(tfTime.getText());
+
 				LoanRequest request = new LoanRequest(ssn,amount,time);
-				listModel.addElement( new RequestReply<LoanRequest,LoanReply>(request, null));	
-				// todo:  send the JMS with request to Loan Broker
-				new Messager().Send(request,"myFirstDestination");
+				listModel.addElement( new RequestReply<LoanRequest,LoanReply>(request, null,id+""));
+				new Messager().Send(request,"myFirstDestination",id+"");
+				id++;
 			}
 		});
 		GridBagConstraints gbc_btnQueue = new GridBagConstraints();
@@ -142,14 +143,24 @@ public class LoanClientFrame extends JFrame {
        
 	}
 	
+
+   private RequestReply<LoanRequest,LoanReply> getRequestReply(String correlationId){
+	   for (int i = 0; i < listModel.getSize(); i++){
+		   RequestReply<LoanRequest,LoanReply> rr =listModel.get(i);
+		   if (rr.getCorrelationId().equals(correlationId)){
+			   return rr;
+		   }
+	   }
+	   return null;
+   }
 	/**
-	 * This method returns the RequestReply line that belongs to the request from requestReplyList (JList). 
+	 * This method returns the RequestReply line that belongs to the request from requestReplyList (JList).
 	 * You can call this method when an reply arrives in order to add this reply to the right request in requestReplyList.
 	 * @param request
 	 * @return
 	 */
-   private RequestReply<LoanRequest,LoanReply> getRequestReply(LoanRequest request){    
-     
+   private RequestReply<LoanRequest,LoanReply> getRequestReply(LoanRequest request){
+
      for (int i = 0; i < listModel.getSize(); i++){
     	 RequestReply<LoanRequest,LoanReply> rr =listModel.get(i);
     	 if (rr.getRequest() == request){
@@ -160,9 +171,11 @@ public class LoanClientFrame extends JFrame {
      return null;
    }
 
-	public void add(LoanReply reply){
-   		listModel.addElement(new RequestReply<>(null,reply));
-   		repaint();
+	public void add(LoanReply reply,String correlationId){
+
+		RequestReply<LoanRequest,LoanReply> rr = getRequestReply(correlationId);
+		rr.setReply(reply);
+		requestReplyList.repaint();
 	}
 	
 	public static void main(String[] args) {

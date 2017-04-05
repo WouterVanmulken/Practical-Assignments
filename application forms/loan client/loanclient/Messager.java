@@ -12,7 +12,7 @@ import java.util.Properties;
  */
 public class Messager {
 
-    public static void Send(Serializable message, String destination) {
+    public static void Send(Serializable message, String destination, String correlationId) {
         javax.jms.Connection connection; // to connect to the ActiveMQ
         Session session; // session for creating messages, producers and
 
@@ -42,6 +42,7 @@ public class Messager {
 //            TextMessage msg = session.createTextMessage(body);
 
             ObjectMessage msg = session.createObjectMessage(message);
+            msg.setJMSCorrelationID(correlationId);
             // send the message
             producer.send(msg);
 

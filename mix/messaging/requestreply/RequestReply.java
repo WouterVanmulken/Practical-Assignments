@@ -14,10 +14,12 @@ public class RequestReply<REQUEST,REPLY> {
 	
 	private REQUEST request;
 	private REPLY reply;
+	private String correlationId;
 	
-	public RequestReply(REQUEST request,  REPLY reply) {
+	public RequestReply(REQUEST request,  REPLY reply, String correlationId) {
 		setRequest(request);
 		setReply(reply);
+		this.correlationId = correlationId;
 	}	
 	
 	public REQUEST getRequest() {
@@ -35,7 +37,11 @@ public class RequestReply<REQUEST,REPLY> {
 	public void setReply(REPLY reply) {
 		this.reply = reply;
 	}
-	
+
+	public String getCorrelationId() {
+		return correlationId;
+	}
+
 	@Override
 	public String toString() {
 	   return ((request!=null)?request.toString():"null request") + "  --->  " + ((reply!=null)?reply.toString():"waiting for reply...");

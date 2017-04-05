@@ -18,16 +18,17 @@ public class ClientMessageListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         LoanRequest loanRequest= null;
+        String correlationId=null;
         try {
              loanRequest= (LoanRequest)((ObjectMessage)message).getObject();
+             correlationId = message.getJMSCorrelationID();
         } catch (JMSException e) {
             e.printStackTrace();
         }
         if(loanRequest !=null) {
             BankInterestRequest interestRequest = new BankInterestRequest(loanRequest.getAmount(),loanRequest.getTime());
-//            frame.add(lr);
             frame.add(loanRequest,interestRequest);
-            Messager.Send(interestRequest,"mySecondDestination");
+            Messager.Send(interestRequest,"mySecondDestination",correlationId);
         }
 
     }

@@ -20,13 +20,15 @@ public class ClientListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         LoanReply reply = null;
+        String correlationId = null;
         try {
             reply = (LoanReply) ((ObjectMessage) message).getObject();
+            correlationId = message.getJMSCorrelationID();
         } catch (JMSException e) {
             e.printStackTrace();
         }
         if (reply != null) {
-            frame.add(reply);
+            frame.add(reply,correlationId);
 //            Messager.Send(LoanReply, "myFourthDestination");
         }
     }

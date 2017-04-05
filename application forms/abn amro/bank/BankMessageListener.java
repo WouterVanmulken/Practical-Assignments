@@ -18,10 +18,11 @@ public class BankMessageListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         BankInterestRequest bir = null;
+        String correlationId = null;
         try {
             bir = (BankInterestRequest) ((ObjectMessage) message).getObject();
-            System.out.println(bir);
-            frame.add(bir);
+            correlationId = message.getJMSCorrelationID();
+            frame.add(bir,correlationId);
             message.getJMSReplyTo();
         } catch (JMSException e) {
             e.printStackTrace();

@@ -21,17 +21,19 @@ public class BankMessageListener implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        BankInterestReply bir = null;
+        BankInterestReply bankInterestReply = null;
+        String correlationId=null;
         try {
-            bir = (BankInterestReply)((ObjectMessage) message).getObject();
+            bankInterestReply = (BankInterestReply)((ObjectMessage) message).getObject();
+            correlationId = message.getJMSCorrelationID();
         } catch (JMSException e) {
             e.printStackTrace();
         }
-        if (bir != null) {
+        if (bankInterestReply != null) {
 
-            frame.add(bir);
-            LoanReply loanReply = new LoanReply(bir.getInterest(),bir.getQuoteId());
-            Messager.Send(loanReply, "myFourthDestination");
+            frame.add(bankInterestReply,correlationId);
+            LoanReply loanReply = new LoanReply(bankInterestReply.getInterest(),bankInterestReply.getQuoteId());
+            Messager.Send(loanReply, "myFourthDestination",correlationId);
         }
 
     }
