@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/target" />
+    <output-test url="file:///test/Practical-Assignments" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/mix" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/application forms/abn amro" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/application forms/loan broker" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/application forms/loan client" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="activemq-all-5.14.4" level="project" />
+  </component>
+</module>
